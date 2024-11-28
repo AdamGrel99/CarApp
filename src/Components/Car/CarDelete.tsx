@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import { Message } from "semantic-ui-react";
+import LoadingIndicator from "../LoadingIndicator";
 
 export default function CarDelete() {
   const [loading, setLoading] = useState<boolean>(true);
@@ -13,9 +15,9 @@ export default function CarDelete() {
     const deleteCar = async () => {
       try {
         await axios.delete(`https://localhost:7072/api/cars/${id}`);
-        setSuccessMessage("Car successfully deleted!");
+        setSuccessMessage("Samochód usunięty!");
       } catch (err) {
-        setError("An unexpected error occurred.");
+        setError("Wystąpił błąd przy usuwaniu Samochodu.");
       } finally {
         setLoading(false);
       }
@@ -24,7 +26,27 @@ export default function CarDelete() {
     deleteCar();
   }, []);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <LoadingIndicator />;
 
-  return successMessage ? <p>{successMessage}</p> : <p>Error: {error}</p>;
+  return successMessage ? (
+    <Message
+      positive
+      style={{
+        marginTop: "4em",
+      }}
+    >
+      <Message.Header>Pomyślnie</Message.Header>
+      <p>{successMessage}</p>
+    </Message>
+  ) : (
+    <Message
+      negative
+      style={{
+        marginTop: "4em",
+      }}
+    >
+      <Message.Header>Error</Message.Header>
+      <p>{error}</p>
+    </Message>
+  );
 }

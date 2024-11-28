@@ -1,33 +1,51 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Car } from "../../Models/Car";
-import { Card, Grid, Container, Header, Button } from "semantic-ui-react";
+import {
+  Card,
+  Grid,
+  Container,
+  Header,
+  Button,
+  Message,
+} from "semantic-ui-react";
 import { NavLink } from "react-router-dom";
+import LoadingIndicator from "../LoadingIndicator";
 
 export default function CarList() {
   const [cars, setCars] = useState<Car[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchCars = async () => {
-      try {
-        const response = await axios.get<Car[]>(
-          "https://localhost:7072/api/cars"
-        );
-        setCars(response.data);
-      } catch (err) {
-        setError("Error fetching cars");
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchCars = async () => {
+    try {
+      const response = await axios.get<Car[]>(
+        "https://localhost:7072/api/cars"
+      );
+      setCars(response.data);
+    } catch (err) {
+      setError("Error fetching cars");
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchCars();
   }, []);
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>{error}</p>;
+  if (loading) return <LoadingIndicator />;
+  if (error)
+    return (
+      <Message
+        error
+        header="Error"
+        content={error}
+        style={{
+          marginTop: "4em",
+        }}
+      />
+    );
 
   return (
     <Container

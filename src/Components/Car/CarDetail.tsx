@@ -1,15 +1,19 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Car, FuelType, BodyType } from "../../Models/Car";
-import { Card, Header, Button, Icon } from "semantic-ui-react";
-import { NavLink, useParams } from "react-router-dom";
+import { Card, Header, Button, Icon, Message } from "semantic-ui-react";
+import { NavLink, useParams, useSearchParams } from "react-router-dom";
+import CarDelete from "./CarDelete";
+import LoadingIndicator from "../LoadingIndicator";
 
 export default function CarDetail() {
   const [car, setCars] = useState<Car | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  let { id } = useParams();
+  const { id } = useParams();
+  const [searchParams] = useSearchParams();
+  const action = searchParams.get("action");
 
   useEffect(() => {
     const fetchCarById = async () => {
@@ -18,8 +22,8 @@ export default function CarDetail() {
           `https://localhost:7072/api/cars/${id}`
         );
         setCars(response.data);
-      } catch (err) {
-        setError("Error fetching car");
+      } catch (error) {
+        setError("Błąd przy pobieraniu Samochodu.");
       } finally {
         setLoading(false);
       }
@@ -27,9 +31,6 @@ export default function CarDetail() {
 
     fetchCarById();
   }, [id]);
-
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>{error}</p>;
 
   const getFuelTypeName = (type: number) => {
     switch (type) {
@@ -63,6 +64,21 @@ export default function CarDetail() {
     }
   };
 
+  if (loading) return <LoadingIndicator />;
+  if (error)
+    return (
+      <Message
+        error
+        header="Error"
+        content={error}
+        style={{
+          marginTop: "4em",
+        }}
+      />
+    );
+
+  if (action === "delete") return <CarDelete />;
+
   return (
     car && (
       <div
@@ -94,9 +110,10 @@ export default function CarDetail() {
         >
           <div>
             <Button
+              as={NavLink}
+              to={`/cars/${car.id}?action=delete`}
               icon
               color="red"
-              onClick={() => console.log(car.id)}
               style={{
                 position: "absolute",
                 top: "-15px",
@@ -118,7 +135,6 @@ export default function CarDetail() {
               to={`/edit/${car.id}`}
               icon
               color="green"
-              onClick={() => console.log(car.id)}
               style={{
                 position: "absolute",
                 top: "25px",
