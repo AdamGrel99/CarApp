@@ -7,10 +7,10 @@ export enum FuelType {
 
 export enum BodyType {
   Hatchback = 'Hatchback',
-  Sedan = 'Sedan',
   Kombi = 'Kombi',
-  SUV = 'SUV',
   Roadster = 'Roadster',
+  SUV = 'SUV',
+  Sedan = 'Sedan',
 }
 
 export interface Car {
