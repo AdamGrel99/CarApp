@@ -2,7 +2,12 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Car, FuelType, BodyType } from "../../Models/Car";
 import { Card, Header, Button, Icon, Message } from "semantic-ui-react";
-import { NavLink, useParams, useSearchParams } from "react-router-dom";
+import {
+  NavLink,
+  useOutletContext,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import CarDelete from "./CarDelete";
 import LoadingIndicator from "../LoadingIndicator";
 
@@ -10,10 +15,15 @@ export default function CarDetail() {
   const [car, setCars] = useState<Car | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   const { id } = useParams();
   const [searchParams] = useSearchParams();
   const action = searchParams.get("action");
+
+  const { removeCar } = useOutletContext<{
+    removeCar: (id: string) => Promise<boolean>;
+  }>();
 
   useEffect(() => {
     const fetchCarById = async () => {
@@ -31,6 +41,17 @@ export default function CarDetail() {
 
     fetchCarById();
   }, [id]);
+
+  const handleDelete = async () => {
+    if (id) {
+      const result = await removeCar(id);
+      if (result) {
+        setSuccessMessage("Samochód został pomyślnie usunięty!");
+      } else {
+        setError("Wystąpił błąd podczas usuwania samochodu.");
+      }
+    }
+  };
 
   const getFuelTypeName = (type: number) => {
     switch (type) {
@@ -77,7 +98,13 @@ export default function CarDetail() {
       />
     );
 
-  if (action === "delete") return <CarDelete />;
+  if (action === "delete") {
+    if (successMessage) {
+      return <CarDelete isSuccess={true} message={successMessage} />;
+    } else if (error) {
+      return <CarDelete isSuccess={false} message={error} />;
+    }
+  }
 
   return (
     car && (
@@ -112,6 +139,7 @@ export default function CarDetail() {
             <Button
               as={NavLink}
               to={`/cars/${car.id}?action=delete`}
+              onClick={handleDelete}
               icon
               color="red"
               style={{

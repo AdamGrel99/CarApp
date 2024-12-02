@@ -37,6 +37,7 @@ export default function CarModify() {
           ...fetchedCar,
           fuelType: Object.values(FuelType)[fetchedCar.fuelType],
           bodyType: Object.values(BodyType)[fetchedCar.bodyType],
+          productionDate: fetchedCar.productionDate.split("T")[0],
         });
       } catch (error) {
         setError("Error fetching car data.");

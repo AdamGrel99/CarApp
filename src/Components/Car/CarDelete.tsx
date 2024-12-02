@@ -1,34 +1,24 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Message } from "semantic-ui-react";
-import LoadingIndicator from "../LoadingIndicator";
 
-export default function CarDelete() {
-  const [loading, setLoading] = useState<boolean>(true);
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
+interface CarDeleteProps {
+  isSuccess: boolean;
+  message: string;
+}
 
-  let { id } = useParams();
+export default function CarDelete({ isSuccess, message }: CarDeleteProps) {
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const deleteCar = async () => {
-      try {
-        await axios.delete(`https://localhost:7072/api/cars/${id}`);
-        setSuccessMessage("Samochód usunięty!");
-      } catch (err) {
-        setError("Wystąpił błąd przy usuwaniu Samochodu.");
-      } finally {
-        setLoading(false);
-      }
-    };
+    const timer = setTimeout(() => {
+      navigate("/cars");
+    }, 2000); // Przekierowanie po 2 sekundach
 
-    deleteCar();
-  }, []);
+    return () => clearTimeout(timer); // Czyszczenie timera przy odmontowaniu
+  }, [navigate]);
 
-  if (loading) return <LoadingIndicator />;
-
-  return successMessage ? (
+  return isSuccess ? (
     <Message
       positive
       style={{
@@ -36,7 +26,7 @@ export default function CarDelete() {
       }}
     >
       <Message.Header>Pomyślnie</Message.Header>
-      <p>{successMessage}</p>
+      <p>{message}</p>
     </Message>
   ) : (
     <Message
@@ -46,7 +36,7 @@ export default function CarDelete() {
       }}
     >
       <Message.Header>Error</Message.Header>
-      <p>{error}</p>
+      <p>{message}</p>
     </Message>
   );
 }
