@@ -1,22 +1,20 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { Button } from "semantic-ui-react";
-import { NavLink, Outlet, useParams } from "react-router-dom";
+import { NavLink, Outlet } from "react-router-dom";
 import CarList from "./CarList";
 import "./CarLayout.css";
 import { Car } from "../../Models/Car";
+import apiClient from "../../app/apiClient";
 
 export default function CarLayout() {
-  const [cars, setCars] = useState<Car[]>([]); // Stan dla listy samochodów
+  const [cars, setCars] = useState<Car[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   const fetchCars = async () => {
     try {
       setLoading(true);
-      const response = await axios.get<Car[]>(
-        "https://localhost:7072/api/cars"
-      );
+      const response = await apiClient.get<Car[]>("/cars");
       setCars(response.data);
     } catch (err) {
       setError("Błąd przy pobieraniu Samochodu.");
@@ -27,7 +25,7 @@ export default function CarLayout() {
 
   const removeCar = async (id: string): Promise<boolean> => {
     try {
-      await axios.delete(`https://localhost:7072/api/cars/${id}`);
+      await apiClient.delete(`/cars/${id}`);
       setCars((prevCars) => prevCars.filter((car) => car.id !== id));
       return true;
     } catch (err) {

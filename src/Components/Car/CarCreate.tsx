@@ -3,6 +3,7 @@ import axios from "axios";
 import { Car, FuelType, BodyType } from "../../Models/Car";
 import { Form, Button, Message } from "semantic-ui-react";
 import BackButton from "../BackButton";
+import apiClient from "../../app/apiClient";
 
 export default function CarCreate() {
   const [car, setCar] = useState<Omit<Car, "id">>({
@@ -51,7 +52,7 @@ export default function CarCreate() {
     };
 
     try {
-      await axios.post("https://localhost:7072/api/cars", payload);
+      await apiClient.post("/cars", payload);
       setSuccessMessage("Utworzono Samochód!");
       setCar({
         brand: "",

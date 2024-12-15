@@ -15,3 +15,25 @@
 .nav-link:hover{
   color: gray;
 }
+
+.user-layout{
+  position: absolute;
+  top: 32px;
+  right: 40px;
+}
+
+.user-text {
+  font-size: 1.4em;
+  color: white;
+  font-weight: bold;
+}
+
+.user-icon {
+  margin-right: 0.5em;
+  color: white; 
+}
+
+.logout-item {
+  color: #d32f2f; 
+  font-weight: bold;
+}

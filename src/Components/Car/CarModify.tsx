@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Car, FuelType, BodyType } from "../../Models/Car";
-import axios from "axios";
 import { Form, Button, Message } from "semantic-ui-react";
 import LoadingIndicator from "../LoadingIndicator";
 import BackButton from "../BackButton";
+import apiClient from "../../app/apiClient";
 
 export default function CarModify() {
   const [car, setCar] = useState<Omit<Car, "id"> | null>(null);
@@ -29,9 +29,7 @@ export default function CarModify() {
   useEffect(() => {
     const fetchCarById = async () => {
       try {
-        const response = await axios.get(
-          `https://localhost:7072/api/cars/${id}`
-        );
+        const response = await apiClient.get(`/cars/${id}`);
         const fetchedCar = response.data;
         setCar({
           ...fetchedCar,
@@ -92,7 +90,7 @@ export default function CarModify() {
           bodyType: Object.values(BodyType).indexOf(car.bodyType),
         };
 
-        await axios.put(`https://localhost:7072/api/cars/${id}`, payload);
+        await apiClient.put(`/cars/${id}`, payload);
         setSuccessMessage("Zaktualizowano Samochód.");
       } catch (error) {
         setError("Błąd ze zmianą wartości.");

@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { Car, FuelType, BodyType } from "../../Models/Car";
 import { Card, Header, Button, Icon, Message } from "semantic-ui-react";
 import {
@@ -10,6 +9,7 @@ import {
 } from "react-router-dom";
 import CarDelete from "./CarDelete";
 import LoadingIndicator from "../LoadingIndicator";
+import apiClient from "../../app/apiClient";
 
 export default function CarDetail() {
   const [car, setCars] = useState<Car | null>(null);
@@ -28,9 +28,7 @@ export default function CarDetail() {
   useEffect(() => {
     const fetchCarById = async () => {
       try {
-        const response = await axios.get<Car>(
-          `https://localhost:7072/api/cars/${id}`
-        );
+        const response = await apiClient.get<Car>(`/cars/${id}`);
         setCars(response.data);
       } catch (error) {
         setError("Błąd przy pobieraniu Samochodu.");

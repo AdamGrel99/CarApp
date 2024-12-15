@@ -9,6 +9,10 @@ import CarCreate from "./Components/Car/CarCreate";
 import CarModify from "./Components/Car/CarModify";
 import Home from "./Components/Home";
 import NotFoundPage from "./Components/NotFoundPage";
+import Info from "./Components/Info";
+import Login from "./Components/Login";
+import Register from "./Components/Register";
+import ProtectedRoute from "./Components/ProtectedRoute";
 
 function App() {
   return (
@@ -16,11 +20,18 @@ function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
-          <Route path="cars" element={<CarLayout />}>
-            <Route path=":id" element={<CarDetail />} />
+          <Route path="login" element={<Login />} />
+          <Route path="register" element={<Register />} />
+
+          <Route element={<ProtectedRoute />}>
+            <Route path="info" element={<Info />} />
+            <Route path="cars" element={<CarLayout />}>
+              <Route path=":id" element={<CarDetail />} />
+            </Route>
+            <Route path="create" element={<CarCreate />} />
+            <Route path="edit/:id" element={<CarModify />} />
           </Route>
-          <Route path="create" element={<CarCreate />} />
-          <Route path="edit/:id" element={<CarModify />} />
+
           <Route path="*" element={<NotFoundPage />} />
         </Route>
       </Routes>
