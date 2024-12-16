@@ -10,6 +10,9 @@
 .nav-link-active {
   font-weight: bold;
   font-size: 1.5rem;
+  text-decoration: none;
+  padding: 0.5rem 1.5rem;
+  border-radius: 4px;
 }
 
 .nav-link:hover{

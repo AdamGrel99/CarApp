@@ -113,7 +113,7 @@ export default function CarCreate() {
           type="number"
           value={car.engineCapacity}
           onChange={handleChange}
-          placeholder="Enter engine capacity"
+          placeholder="Podaj pojemność silnika"
           required
         />
         <Form.Input
@@ -122,7 +122,7 @@ export default function CarCreate() {
           type="number"
           value={car.luggageCapacity}
           onChange={handleChange}
-          placeholder="Enter luggage capacity"
+          placeholder="Podaj pojemność bagażnika"
           required
         />
         <Form.Select
@@ -173,7 +173,7 @@ export default function CarCreate() {
               [name!]: value,
             }))
           }
-          placeholder="Select body type"
+          placeholder="Wybierz typ podwozia"
           required
         />
         <Button type="submit" color="green" fluid loading={isSubmitting}>

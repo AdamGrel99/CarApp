@@ -137,7 +137,7 @@ export default function CarModify() {
           type="number"
           value={car.engineCapacity}
           onChange={handleChange}
-          placeholder="Enter engine capacity"
+          placeholder="Podaj pojemność silnika"
           required
         />
         <Form.Input
@@ -146,7 +146,7 @@ export default function CarModify() {
           type="number"
           value={car.luggageCapacity}
           onChange={handleChange}
-          placeholder="Enter luggage capacity"
+          placeholder="Podaj pojemność bagażnika"
           required
         />
 

@@ -32,6 +32,7 @@ export default function Register() {
     e.preventDefault();
     setError(null);
     setLoading(true);
+    console.log(formData);
 
     try {
       const response = await axios.post(
@@ -42,7 +43,7 @@ export default function Register() {
         navigate("/login");
       }
     } catch (err: any) {
-      setError(err.response?.data || "Nie spodziewany błąd!");
+      setError("Nie spodziewany błąd!");
     } finally {
       setLoading(false);
     }

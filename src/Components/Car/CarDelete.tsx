@@ -13,9 +13,9 @@ export default function CarDelete({ isSuccess, message }: CarDeleteProps) {
   useEffect(() => {
     const timer = setTimeout(() => {
       navigate("/cars");
-    }, 2000); // Przekierowanie po 2 sekundach
+    }, 2000);
 
-    return () => clearTimeout(timer); // Czyszczenie timera przy odmontowaniu
+    return () => clearTimeout(timer);
   }, [navigate]);
 
   return isSuccess ? (
